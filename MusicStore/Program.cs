@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace MusicStore
     {
         static void Main(string[] args)
         {
+            
         }
     }
 }
@@ -27,7 +29,7 @@ namespace MusicStore
  - себестоимость, 
  - цена для продажи. 
 
-Приложениедолжнопозволять:
+Приложение должно позволять:
  - добавлять пластинки,
  - удалятьпластинки, 
  - редактировать параметры пластинок,
@@ -40,6 +42,7 @@ namespace MusicStore
  - название диска, 
  - исполнитель,
  - жанр.
+
 Приложение должно предоставлять возможность просмотреть 
  - список новинок, 
  - список самых продаваемых пластинок,
