@@ -51,6 +51,7 @@ public class StoreManager : DatabaseManager
         }
     }
 
+    // Ошибка manager.cs есть ошибка в строке 51
     private Album MapToAlbum(SqlDataReader reader)
     {
         return new Album
