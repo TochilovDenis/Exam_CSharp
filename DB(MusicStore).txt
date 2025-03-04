@@ -1,0 +1,80 @@
+CREATE TABLE [dbo].[Genres] (
+    [GenreID] INT NOT NULL IDENTITY(1,1),
+    [Name] NVARCHAR(50) NOT NULL,
+    CONSTRAINT [PK_Genres] PRIMARY KEY ([GenreID]),
+    CONSTRAINT [UK_Genres_Name] UNIQUE ([Name])
+);
+
+CREATE TABLE [dbo].[Users] (
+    [UserID] INT NOT NULL IDENTITY(1,1),
+    [Login] NVARCHAR(50) NOT NULL,
+    [PasswordHash] NVARCHAR(MAX) NOT NULL,
+    [IsAdmin] BIT NOT NULL DEFAULT ((0)),
+    CONSTRAINT [PK_Users] PRIMARY KEY ([UserID]),
+    CONSTRAINT [UK_Users_Login] UNIQUE ([Login])
+);
+
+CREATE TABLE [dbo].[Customers] (
+    [CustomerID] INT NOT NULL IDENTITY(1,1),
+    [UserID] INT NOT NULL,
+    [TotalSpent] DECIMAL(18,2) NOT NULL DEFAULT ((0)),
+    [RegistrationDate] DATETIME NOT NULL DEFAULT GETDATE(),
+    CONSTRAINT [PK_Customers] PRIMARY KEY ([CustomerID]),
+    CONSTRAINT [UK_Customers_UserID] UNIQUE ([UserID]),
+    CONSTRAINT [FK_Customers_Users] FOREIGN KEY ([UserID]) REFERENCES [dbo].[Users]([UserID])
+);
+
+CREATE TABLE [dbo].[Albums] (
+    [AlbumID] INT NOT NULL IDENTITY(1,1),
+    [Title] NVARCHAR(200) NOT NULL,
+    [Artist] NVARCHAR(100) NOT NULL,
+    [Label] NVARCHAR(100) NULL,
+    [TrackCount] INT NULL,
+    [GenreID] INT NULL,
+    [YearReleased] INT NULL,
+    [CostPrice] DECIMAL(18,2) NOT NULL,
+    [SellingPrice] DECIMAL(18,2) NOT NULL,
+    CONSTRAINT [PK_Albums] PRIMARY KEY ([AlbumID]),
+    CONSTRAINT [FK_Albums_Genres] FOREIGN KEY ([GenreID]) REFERENCES [dbo].[Genres]([GenreID])
+);
+
+CREATE TABLE [dbo].[Orders] (
+    [OrderID] INT NOT NULL IDENTITY(1,1),
+    [CustomerID] INT NULL,
+    [OrderDate] DATETIME NOT NULL DEFAULT GETDATE(),
+    [TotalAmount] DECIMAL(18,2) NULL,
+    [Status] NVARCHAR(50) NOT NULL,
+    CONSTRAINT [PK_Orders] PRIMARY KEY ([OrderID]),
+    CONSTRAINT [FK_Orders_Customers] FOREIGN KEY ([CustomerID]) REFERENCES [dbo].[Customers]([CustomerID]),
+    CONSTRAINT [CK_Orders_Status] CHECK ([Status] IN ('Pending', 'Completed', 'Cancelled'))
+);
+
+CREATE TABLE [dbo].[OrderItems] (
+    [OrderItemID] INT NOT NULL IDENTITY(1,1),
+    [OrderID] INT NOT NULL,
+    [AlbumID] INT NOT NULL,
+    [Quantity] INT NOT NULL,
+    [UnitPrice] DECIMAL(18,2) NOT NULL,
+    CONSTRAINT [PK_OrderItems] PRIMARY KEY ([OrderItemID]),
+    CONSTRAINT [FK_OrderItems_Orders] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Orders]([OrderID]),
+    CONSTRAINT [FK_OrderItems_Albums] FOREIGN KEY ([AlbumID]) REFERENCES [dbo].[Albums]([AlbumID])
+);
+
+CREATE TABLE [dbo].[Sales] (
+    [SaleID] INT NOT NULL IDENTITY(1,1),
+    [AlbumID] INT NOT NULL,
+    [SaleDate] DATETIME NOT NULL DEFAULT GETDATE(),
+    [QuantitySold] INT NOT NULL,
+    [SellingPrice] DECIMAL(18,2) NOT NULL,
+    CONSTRAINT [PK_Sales] PRIMARY KEY ([SaleID]),
+    CONSTRAINT [FK_Sales_Albums] FOREIGN KEY ([AlbumID]) REFERENCES [dbo].[Albums]([AlbumID])
+);
+
+CREATE TABLE [dbo].[CustomerDiscounts] (
+    [DiscountID] INT NOT NULL IDENTITY(1,1),
+    [CustomerID] INT NOT NULL,
+    [MinPurchase] DECIMAL(18,2) NOT NULL,
+    [DiscountPercentage] DECIMAL(5,2) NOT NULL,
+    CONSTRAINT [PK_CustomerDiscounts] PRIMARY KEY ([DiscountID]),
+    CONSTRAINT [FK_CustomerDiscounts_Customers] FOREIGN KEY ([CustomerID]) REFERENCES [dbo].[Customers]([CustomerID])
+);
