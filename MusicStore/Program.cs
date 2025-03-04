@@ -1,19 +1,47 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MusicStore;
 
-namespace MusicStore
+class Program
 {
-    class Program
+    static void Main()
     {
-        static void Main(string[] args)
+        // Инициализация менеджеров
+        var storeManager = new StoreManager("YourConnectionString");
+        var customerManager = new CustomerManager("YourConnectionString");
+        var promotionManager = new PromotionManager("YourConnectionString");
+
+        // Пример добавления пластинки
+        var album = new Album
         {
-            
-        }
+            Title = "Новый альбом",
+            Artist = "Группа",
+            Label = "Студия",
+            TrackCount = 12,
+            GenreID = 1,
+            YearReleased = 2025,
+            CostPrice = 500.00m,
+            SellingPrice = 800.00m
+        };
+
+        storeManager.AddAlbum(album);
+
+        // Поиск пластинок
+        var results = storeManager.SearchAlbums("рок");
+
+        // Регистрация клиента
+        var customer = new Customer
+        {
+            Login = "user123",
+            PasswordHash = "password123"
+        };
+
+        customerManager.RegisterCustomer(customer);
     }
+
+   
 }
 
 /*Создать приложение «Музыкальный магазин».  

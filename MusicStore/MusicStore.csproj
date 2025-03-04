@@ -45,9 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MusicStoreManager.cs" />
-    <Compile Include="getr_set.cs" />
+    <Compile Include="Album.cs" />
+    <Compile Include="component.cs" />
+    <Compile Include="Customer.cs" />
+    <Compile Include="manager.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Promotion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
